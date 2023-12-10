@@ -5,13 +5,69 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+Wy8q+9t9JgxukFHR0iPaUHYgF8hFQ"
+    crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="shortcut icon" href="./img/floco-de-neve.png" type="image/x-icon">
     <link rel="stylesheet" href="./CSS/sytle.css">
     <title>Serviços | ROFRIOS </title>
 </head>
 
 <body>
+
+    <label for="tipoServico">Digite o tipo de serviço desejado (instalação ou manutenção):</label>
+    <input type="text" id="tipoServico">
+
+    <label for="areaAmbiente">Digite a área do ambiente em metros quadrados:</label>
+    <input type="number" id="areaAmbiente">
+
+    <button id="simularButton">Simular</button>
+
+    <div id="resultado"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tipoServicoInput = document.getElementById('tipoServico');
+            const areaAmbienteInput = document.getElementById('areaAmbiente');
+            const simularButton = document.getElementById('simularButton');
+            const resultadoElement = document.getElementById('resultado');
+
+            simularButton.addEventListener('click', simularServicoArCondicionado);
+
+            function simularServicoArCondicionado() {
+                const tipoServico = tipoServicoInput.value.toLowerCase();
+                const areaAmbiente = parseFloat(areaAmbienteInput.value);
+
+                const custoBaseInstalacao = 500;
+                const custoBaseManutencao = 200;
+
+                const custoTotal = tipoServico === 'instalação' ?
+                    custoBaseInstalacao + (areaAmbiente * 20) : tipoServico === 'manutenção' ?
+                        custoBaseManutencao : null;
+
+                const resultadoFinal = custoTotal || 0;
+
+                resultadoElement.innerHTML = `<p>O custo total para ${tipoServico} de ar condicionado em um ambiente de ${areaAmbiente} metros quadrados é: R$ ${resultadoFinal.toFixed(2)}</p>`;
+
+                // Armazenar dados no Local Storage usando JSON
+                const dados = { tipoServico, areaAmbiente, custoTotal, resultadoFinal };
+                localStorage.setItem('dadosServico', JSON.stringify(dados));
+            }
+
+            // Carregar dados ao carregar a página
+            const dadosArmazenados = localStorage.getItem('dadosServico');
+            if (dadosArmazenados) {
+                const dados = JSON.parse(dadosArmazenados);
+                tipoServicoInput.value = dados.tipoServico;
+                areaAmbienteInput.value = dados.areaAmbiente;
+            }
+        });
+    </script>
+
     <header style="background-image: url(./img/servicos.webp);">
         <div class="container">
             <nav>
@@ -49,66 +105,87 @@
                 <div class="todos-card-item">
                     <img src="./img/lavar-as-maos.png" alt="">
                     <p class="nome-servico"><strong>Higienização de Fan Coils</strong></p>
-                    <p class="descricao">Oferecemos serviços de higienização preventiva de Fan Coils, que envolvem a troca ou limpeza de filtros, serpentinas e bandejas coletoras de condensado, além do reaperto ou substituição de correias. Também verificamos os rolamentos dos motores e rotores, inspecionamos as válvulas de controle e bloqueio. Esses serviços atendem à legislação em vigor e são voltados para ambientes que utilizam condicionadores de ar tipo Fan Coil, que dispensam o uso direto de fluidos refrigerantes e utilizam água gelada em seu sistema. O insuflamento interno pode ser realizado em unidades cassete, hi-wall, built-in ou em sistemas de grande capacidade com ramais de dutos. A unidade externa, conhecida como CAG (central de água gelada), é composta por um ou mais chiller's.</p>
+                    <p class="descricao">Oferecemos serviços de higienização preventiva de Fan Coils, que envolvem a
+                        troca ou limpeza de filtros, serpentinas e bandejas coletoras de condensado, além do reaperto ou
+                        substituição de correias. Também verificamos os rolamentos dos motores e rotores, inspecionamos
+                        as válvulas de controle e bloqueio. Esses serviços atendem à legislação em vigor e são voltados
+                        para ambientes que utilizam condicionadores de ar tipo Fan Coil, que dispensam o uso direto de
+                        fluidos refrigerantes e utilizam água gelada em seu sistema. O insuflamento interno pode ser
+                        realizado em unidades cassete, hi-wall, built-in ou em sistemas de grande capacidade com ramais
+                        de dutos. A unidade externa, conhecida como CAG (central de água gelada), é composta por um ou
+                        mais chiller's.</p>
                 </div>
 
                 <div class="todos-card-item">
-                    <img src="./img/pingo-dagua.png" alt="" >
+                    <img src="./img/pingo-dagua.png" alt="">
                     <p class="nome-servico"><strong>Higienização de Sistemas</strong></p>
-                    <p class="descricao">Oferecemos um sistema de higienização de sistemas de climatização que pode ser realizado sem interrupção do horário de trabalho do cliente e sem a necessidade de remover os dutos e revestimentos. Antes de iniciar o trabalho, realizamos um planejamento detalhado levando em consideração as condições do ambiente, suprimento de água, pontos de energia, horários de acesso e segurança. A higienização segue normas específicas para garantir a qualidade do ar respirado pelos ocupantes dos ambientes. Além disso, a manutenção adequada previne doenças como a doença do legionário, causada por bactérias encontradas em sistemas de ar-condicionado e torres de refrigeração de água. É importante conhecer mais sobre essa doença e adotar medidas de higienização para evitar sua propagação.</p>
+                    <p class="descricao">Oferecemos um sistema de higienização de sistemas de climatização que pode ser
+                        realizado sem interrupção do horário de trabalho do cliente e sem a necessidade de remover os
+                        dutos e revestimentos. Antes de iniciar o trabalho, realizamos um planejamento detalhado levando
+                        em consideração as condições do ambiente, suprimento de água, pontos de energia, horários de
+                        acesso e segurança. A higienização segue normas específicas para garantir a qualidade do ar
+                        respirado pelos ocupantes dos ambientes. Além disso, a manutenção adequada previne doenças como
+                        a doença do legionário, causada por bactérias encontradas em sistemas de ar-condicionado e
+                        torres de refrigeração de água. É importante conhecer mais sobre essa doença e adotar medidas de
+                        higienização para evitar sua propagação.</p>
                 </div>
 
                 <div class="todos-card-item">
                     <img src="./img/ar-condicionado.png" alt="">
                     <p class="nome-servico"><strong>Instalação de Ar Condicionado</strong></p>
                     <p class="descricao">
-                        Antes de instalar um ar condicionado de janela ou parede, é importante escolher o aparelho adequado, considerando a tensão de alimentação (110V ou 220V) e a potência necessária. Verifique as dimensões do caixilho para garantir um encaixe correto. <br>
+                        Antes de instalar um ar condicionado de janela ou parede, é importante escolher o aparelho
+                        adequado, considerando a tensão de alimentação (110V ou 220V) e a potência necessária. Verifique
+                        as dimensões do caixilho para garantir um encaixe correto. <br>
 
-                        A instalação de um ar condicionado de janela é simples e econômica. Coloque o aparelho no caixilho, faça a vedação com a espuma fornecida, fixe-o e conecte-o à tomada apropriada. Verifique se está refrigerando adequadamente, sem formação de gelo, e mantenha o filtro limpo. <br>
+                        A instalação de um ar condicionado de janela é simples e econômica. Coloque o aparelho no
+                        caixilho, faça a vedação com a espuma fornecida, fixe-o e conecte-o à tomada apropriada.
+                        Verifique se está refrigerando adequadamente, sem formação de gelo, e mantenha o filtro limpo.
+                        <br>
 
-                        Para a instalação de um ar condicionado tipo split, é recomendado solicitar uma visita técnica da empresa Rofrio ou utilizar um dimensionador virtual disponível em seu site para dimensionar corretamente o ambiente.
+                        Para a instalação de um ar condicionado tipo split, é recomendado solicitar uma visita técnica
+                        da empresa Rofrio ou utilizar um dimensionador virtual disponível em seu site para dimensionar
+                        corretamente o ambiente.
                     </p>
                 </div>
 
                 <div class="todos-card-item">
-                <img src="./img/manutencao.png"  alt="">
+                    <img src="./img/manutencao.png" alt="">
                     <p class="nome-servico"><strong>Manutenção de Ar Condicionado</strong></p>
                     <p class="descricao">
-                        Durante os dias quentes o ar-condicionado se torna o principal companheiro das famílias. Em empresas, o aparelho é quase obrigatório. <br>
+                        Durante os dias quentes o ar-condicionado se torna o principal companheiro das famílias. Em
+                        empresas, o aparelho é quase obrigatório. <br>
 
-                        A falta de limpeza e Manutenção de Ar Condicionado é um dos principais responsáveis pela proliferação de doenças respiratórias, alergias, irritações e disseminação de odores desagradáveis no ambiente. <br>
+                        A falta de limpeza e Manutenção de Ar Condicionado é um dos principais responsáveis pela
+                        proliferação de doenças respiratórias, alergias, irritações e disseminação de odores
+                        desagradáveis no ambiente. <br>
 
-                        Com a Manutenção de Ar Condicionado, o ambiente climatizado fica mais saudável, reduz o custo de energia, prolonga a vida útil do equipamento e evita a queima de compressores e motores, que têm alto custo para conserto. <br>
+                        Com a Manutenção de Ar Condicionado, o ambiente climatizado fica mais saudável, reduz o custo de
+                        energia, prolonga a vida útil do equipamento e evita a queima de compressores e motores, que têm
+                        alto custo para conserto. <br>
 
-                        Para ter um ar-condicionado ainda mais limpo e livre de bactérias, o ideal é fazer a Manutenção de Ar Condicionado completa duas vezes por ano.
+                        Para ter um ar-condicionado ainda mais limpo e livre de bactérias, o ideal é fazer a Manutenção
+                        de Ar Condicionado completa duas vezes por ano.
                     </p>
                 </div>
 
-                
+
 
             </div>
         </div>
 
     </section>
-   
-    
 
-
-
-
-
-    <footer class="roda_pe">
-        <div class="container">
-            <div class="links">
-                <a href="#"><i class="fa-brands fa-facebook" style="color: #045df6;"></i></a>
-                <a href="#"><i class="fa-brands fa-instagram" style="color: #045df6;"></i></a>
-                <a href="#"><i class="fa-brands fa-linkedin-in" style="color: #045df6;"></i></a>
+        <footer class="roda_pe">
+            <div class="container">
+                <div class="links">
+                    <a href="#"><i class="fa-brands fa-facebook" style="color: #045df6;"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram" style="color: #045df6;"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin-in" style="color: #045df6;"></i></a>
+                </div>
             </div>
-            <p>Desenvovido por Alexandre Pacheco</p>
-        </div>
-
-    </footer>
-    <script src="./JS/main.js"></script>
+        </footer>
+        <script src="./JS/main.js"></script>
 </body>
 
 </html>
